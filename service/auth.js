@@ -8,6 +8,6 @@ function getUser(id) {
 }
 
 module.exports = {
-  getUser,
   setUser,
+  getUser,
 };
