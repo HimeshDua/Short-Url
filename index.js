@@ -1,9 +1,11 @@
 const express = require('express');
+const path = require('path');
 
 const app = express();
 const PORT = 8001;
 
-const urlRoutes = require('./routes/url');
+const urlRoute = require('./routes/url');
+const staticRoute = require('./routes/staticRouter');
 const { connectToMongoDB } = require('./connection');
 const URL = require('./models/url');
 
@@ -13,8 +15,18 @@ connectToMongoDB(url)
   .catch((e) => console.log('MongoDB is having Issues', e));
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-app.use('/url', urlRoutes);
+app.set('view engine', 'ejs');
+app.set('views', path.resolve('./views'));
+
+// app.get('/test', async (req, res) => {
+//   const allUsers = await URL.find({});
+//   return res.render('home', { urls: allUsers });
+// });
+
+app.use('/url', urlRoute);
+app.use('/', staticRoute);
 
 app.use('/url/:shortId', async (req, res) => {
   const shortId = req.params.shortId;
