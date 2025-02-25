@@ -1,16 +1,17 @@
 const express = require('express');
 const path = require('path');
+const { connectToMongoDB } = require('./connection');
 
 const app = express();
 const PORT = 8001;
 
 const urlRoute = require('./routes/url');
 const staticRoute = require('./routes/staticRouter');
-const { connectToMongoDB } = require('./connection');
+const userRoute = require('./routes/user');
+
 const URL = require('./models/url');
 
-const url = 'mongodb://localhost:27017/url-shortner';
-connectToMongoDB(url)
+connectToMongoDB('mongodb://localhost:27017/url-shortner')
   .then(() => console.log('MongoDB is Connected'))
   .catch((e) => console.log('MongoDB is having Issues', e));
 
@@ -20,11 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
 app.set('views', path.resolve('./views'));
 
-// app.get('/test', async (req, res) => {
-//   const allUsers = await URL.find({});
-//   return res.render('home', { urls: allUsers });
-// });
-
+app.use('/user', userRoute);
 app.use('/url', urlRoute);
 app.use('/', staticRoute);
 

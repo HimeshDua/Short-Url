@@ -8,16 +8,81 @@
       * {
         font-family: Helvetica;
       }
+      body {
+        height: 100%;
+        width: 100%;
+        overflow-x: hidden;
+      }
       h1 {
         line-height: 0.5;
-        margin-top: 2rem;
+        margin: 1rem auto;
+      }
+      form {
+        background: white;
+        padding: 20px;
+        width: 50%;
+        margin: 14px auto;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        display: grid;
+      }
+      input {
+        padding: 10px;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        padding: 10px 15px;
+        background: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-top: 10px;
+      }
+      button:hover {
+        background: #218838;
+      }
+      .tableCon {
+        height: 64vh;
+        margin: 10px auto;
+        overflow: auto;
+      }
+      table {
+        max-width: 80%;
+        margin: 0px auto;
+        border-collapse: collapse;
+        white-space: wrap;
+        background: white;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+      }
+      th {
+        background-color: #007bff;
+        color: white;
+      }
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+      a {
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
       }
     </style>
   </head>
 
   <body>
-    <h1>URL Shortner</h1>
     <form method="POST" action="/url">
+      <h1>URL Shortner</h1>
       <label for="url">Enter your Original URL</label> <br />
       <input type="text" name="url" placeholder="https://example.com" />
       <button type="submit">Generate</button>
@@ -25,5 +90,31 @@
       <p>URL Generated: http://localhost:8001/url/<%=id%></p>
       <% } %>
     </form>
+
+    <% if (locals.urls) { %>
+
+    <div class="tableCon">
+      <table>
+        <thead>
+          <tr>
+            <th>S. No</th>
+            <th>ShortID</th>
+            <th>Redirect</th>
+            <th>Clicks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% urls.forEach((url, index) => { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= url.shortId %></td>
+            <td><%= url.redirectURL %></td>
+            <td><%= url.visitHistory.length %></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+      <% } %>
+    </div>
   </body>
 </html>
